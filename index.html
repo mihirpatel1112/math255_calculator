@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MATH255-Calculator</title>
+  </head>
+  <body>
+    <h1>MATH255 Calculator</h1>
+    <ol>
+      <li>
+        <h2>log<sub>2</sub>x</h2>
+        x = <input type="number" id="input-x" step="1" /> <br /><br />
+        log<sub>2</sub><span id="input-1"></span> = <span id="result"></span>
+      </li>
+
+      <li>
+        <h2>e<sup>x</sup></h2>
+
+        x = <input type="number" id="input-9" step="1" /> <br /><br />
+        Result = <span id="result-5"></span> <br /><br />
+      </li>
+
+      <li>
+        <h2>nCr</h2>
+        n = <input type="number" id="input-2" step="1" /> r =
+        <input type="number" id="input-3" step="1" /> <br /><br />
+        Result = <span id="result-2"></span>
+      </li>
+
+      <li>
+        <h2>Binomial Distribution</h2>
+        <img src="binom.png" alt="Binomial distribution image" />
+        <br />
+        n = <input type="number" id="input-4" step="1" />
+        <br />
+        x = <input type="number" id="input-5" step="1" />
+        <br />
+        p = <input type="number" id="input-6" step="0.01" /> <br /><br />
+        <div>
+          Operator:
+          <input
+            type="radio"
+            name="operator-binomial"
+            value="="
+            id="operator-binomial-="
+            checked
+          />
+          <label for="operator-binomial-=">=</label>
+          <input
+            type="radio"
+            name="operator-binomial"
+            value="<"
+            id="operator-binomial-<"
+          />
+          <label for="operator-binomial-<"><</label>
+          <input
+            type="radio"
+            name="operator-binomial"
+            value="<="
+            id="operator-binomial-<="
+          />
+          <label for="operator-binomial-<="><=</label>
+          <input
+            type="radio"
+            name="operator-binomial"
+            value=">"
+            id="operator-binomial->"
+          />
+          <label for="operator-binomial->">></label>
+          <input
+            type="radio"
+            name="operator-binomial"
+            value=">="
+            id="operator-binomial->="
+          />
+          <label for="operator-binomial->=">>=</label>
+        </div>
+        <br />
+        Result = <span id="result-3"></span> <br /><br />
+      </li>
+
+      <li>
+        <h2>Geometric Distribution</h2>
+        <img src="geom.png" alt="Geometric distribution image" />
+        <br />
+        p = <input type="number" id="input-7" step="0.01" />
+        <br />
+        x = <input type="number" id="input-8" step="1" /> <br /><br />
+        <div>
+          Operator:
+          <input
+            type="radio"
+            name="operator-geo"
+            value="="
+            id="operator-geo-="
+            checked
+          />
+          <label for="operator-geo-=">=</label>
+          <input
+            type="radio"
+            name="operator-geo"
+            value="<"
+            id="operator-geo-<"
+          />
+          <label for="operator-geo-<"><</label>
+          <input
+            type="radio"
+            name="operator-geo"
+            value="<="
+            id="operator-geo-<="
+          />
+          <label for="operator-geo-<="><=</label>
+          <input
+            type="radio"
+            name="operator-geo"
+            value=">"
+            id="operator-geo->"
+          />
+          <label for="operator-geo->">></label>
+          <input
+            type="radio"
+            name="operator-geo"
+            value=">="
+            id="operator-geo->="
+          />
+          <label for="operator-geo->=">>=</label>
+        </div>
+        <br />
+        Result = <span id="result-4"></span> <br /><br />
+      </li>
+
+      <li>
+        <h2>Poisson Distribution</h2>
+        <img src="pois.png" alt="Geometric distribution image" />
+        <br />
+        u = <input type="number" id="input-10" step="1" />
+        <br />
+        x = <input type="number" id="input-11" step="1" /> <br /><br />
+        Result = <span id="result-6"></span>
+      </li>
+    </ol>
+
+    <script>
+      // log base 2
+      const inputX = document.getElementById("input-x");
+      const resultLog = document.getElementById("result");
+      const inputValueLog = document.getElementById("input-1");
+
+      inputX.addEventListener("input", () => {
+        const x = parseFloat(inputX.value);
+        if (isNaN(x) || x <= 0) {
+          resultLog.textContent = "Invalid input";
+          inputValueLog.textContent = "";
+          return;
+        }
+        const log = Math.log2(x);
+        resultLog.textContent = log.toFixed(4);
+        inputValueLog.textContent = x;
+      });
+
+      // nCr
+      const inputN = document.getElementById("input-2");
+      const inputR = document.getElementById("input-3");
+      const resultNCr = document.getElementById("result-2");
+
+      inputN.addEventListener("input", calculateNCr);
+      inputR.addEventListener("input", calculateNCr);
+
+      function calculateNCr() {
+        const n = parseInt(inputN.value);
+        const r = parseInt(inputR.value);
+        if (isNaN(n) || isNaN(r) || n < r || n < 0 || r < 0) {
+          resultNCr.textContent = "Invalid input";
+          return;
+        }
+        const numerator = factorial(n);
+        const denominator = factorial(r) * factorial(n - r);
+        const ncr = numerator / denominator;
+        resultNCr.textContent = ncr.toFixed(0);
+      }
+
+      function factorial(n) {
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+          result *= i;
+        }
+        return result;
+      }
+
+      // Binomial Distribution
+      const input4 = document.getElementById("input-4");
+      const input5 = document.getElementById("input-5");
+      const input6 = document.getElementById("input-6");
+      const result3 = document.getElementById("result-3");
+
+      const calculateBinomial = () => {
+        const n = parseInt(input4.value);
+        const x = parseInt(input5.value);
+        const p = parseFloat(input6.value);
+
+        if (
+          isNaN(n) ||
+          isNaN(x) ||
+          isNaN(p) ||
+          n < 0 ||
+          x < 0 ||
+          p < 0 ||
+          p > 1
+        ) {
+          result3.textContent = "Invalid input";
+          return;
+        }
+
+        const q = 1 - p;
+        let cumulativeProb = 0;
+        for (let i = 0; i <= x; i++) {
+          const coefficient = factorial(n) / (factorial(i) * factorial(n - i));
+          const probability = coefficient * Math.pow(p, i) * Math.pow(q, n - i);
+          cumulativeProb += probability;
+        }
+
+        const operator = document.querySelector(
+          'input[name="operator-binomial"]:checked'
+        ).value;
+        let result;
+        switch (operator) {
+          case "=":
+            result = probabilityMassFunction(n, x, p);
+            break;
+          case "<":
+            result = cumulativeProb - probabilityMassFunction(n, x, p);
+            break;
+          case "<=":
+            result = cumulativeProb;
+            break;
+          case ">":
+            result = 1 - cumulativeProb + probabilityMassFunction(n, x, p);
+            break;
+          case ">=":
+            result = 1 - cumulativeProb;
+            break;
+        }
+
+        result3.textContent = `P(X ${operator} ${x}) = ${result.toFixed(4)}`;
+      };
+
+      const probabilityMassFunction = (n, x, p) => {
+        const q = 1 - p;
+        const coefficient = factorial(n) / (factorial(x) * factorial(n - x));
+        return coefficient * Math.pow(p, x) * Math.pow(q, n - x);
+      };
+
+      input4.addEventListener("input", calculateBinomial);
+      input5.addEventListener("input", calculateBinomial);
+      input6.addEventListener("input", calculateBinomial);
+
+      document
+        .querySelectorAll('input[name="operator-binomial"]')
+        .forEach((operator) => {
+          operator.addEventListener("change", calculateBinomial);
+        });
+
+      // Geometric Distribution
+      const input7 = document.getElementById("input-7");
+      const input8 = document.getElementById("input-8");
+      const result4 = document.getElementById("result-4");
+
+      input7.addEventListener("input", calculateGeometric);
+      input8.addEventListener("input", calculateGeometric);
+
+      function calculateGeometric() {
+        const p = parseFloat(input7.value);
+        const x = parseInt(input8.value);
+
+        if (isNaN(p) || isNaN(x) || p <= 0 || p >= 1 || x <= 0) {
+          result4.textContent = "Invalid input";
+          return;
+        }
+
+        const operator = document.querySelector(
+          'input[name="operator-geo"]:checked'
+        ).value;
+        let result;
+        switch (operator) {
+          case "=":
+            result = Math.pow(1 - p, x - 1) * p;
+            break;
+          case "<":
+            result = cumulativeGeometric(p, x - 1);
+            break;
+          case "<=":
+            result = cumulativeGeometric(p, x);
+            break;
+          case ">":
+            result = 1 - cumulativeGeometric(p, x);
+            break;
+          case ">=":
+            result = 1 - cumulativeGeometric(p, x - 1);
+            break;
+        }
+
+        result4.textContent = `P(X ${operator} ${x}) = ${result.toFixed(4)}`;
+      }
+
+      const cumulativeGeometric = (p, x) => {
+        if (x < 1) return 0;
+        let cumulativeProb = 0;
+        for (let i = 1; i <= x; i++) {
+          cumulativeProb += Math.pow(1 - p, i - 1) * p;
+        }
+        return cumulativeProb;
+      };
+
+      document
+        .querySelectorAll('input[name="operator-geo"]')
+        .forEach((operator) => {
+          operator.addEventListener("change", calculateGeometric);
+        });
+
+      //e ^ x
+      const input9 = document.getElementById("input-9");
+      const result5 = document.getElementById("result-5");
+
+      input9.addEventListener("input", () => {
+        const x = parseFloat(input9.value);
+        if (isNaN(x)) {
+          result5.textContent = "Invalid input";
+          return;
+        }
+        const result = Math.exp(x);
+        result5.textContent = result.toFixed(4);
+      });
+
+      //Poisson Dis
+      const input10 = document.getElementById("input-10");
+      const input11 = document.getElementById("input-11");
+      const result6 = document.getElementById("result-6");
+
+      input10.addEventListener("input", calculatePoisson);
+      input11.addEventListener("input", calculatePoisson);
+
+      function calculatePoisson() {
+        const u = parseFloat(input10.value);
+        const x = parseInt(input11.value);
+
+        if (isNaN(u) || isNaN(x) || u < 0 || x < 0) {
+          result6.textContent = "Invalid input";
+          return;
+        }
+
+        const poisson = (Math.pow(u, x) * Math.exp(-u)) / factorial(x);
+        result6.textContent = poisson.toFixed(4);
+      }
+
+      function factorial(n) {
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+          result *= i;
+        }
+        return result;
+      }
+    </script>
+  </body>
+</html>
